@@ -6,6 +6,8 @@
   >
     <p>{{ user.providerData ? user.providerData[0].displayName : '未ログイン'}}</p>
     <v-btn color="info" @click="signInWithTwitter">ログイン</v-btn>
+
+    <v-btn @click="$store.commit('alert/activate', 'test')">アラート</v-btn>
   </v-layout>
 </template>
 

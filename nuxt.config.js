@@ -64,6 +64,10 @@ module.exports = {
         import: ["~assets/style/variables.styl"]
       }
     },
+
+    vendor: [
+      'vuex',
+    ],
     
     /*
     ** You can extend webpack config here
