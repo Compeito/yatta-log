@@ -61,19 +61,36 @@ module.exports = {
     plugins: [new VuetifyLoaderPlugin()],
     loaders: {
       stylus: {
-        import: ["~assets/style/variables.styl"]
+        import: ['~assets/style/variables.styl']
       }
     },
-
     vendor: [
       'vuex',
     ],
-    
+
+    /*
+     ** PWA settings
+     */
+    workbox: {
+      dev: true
+    },
+    manifest: {
+      name: 'PWATest',
+      short_name: 'PWA',
+      title: 'PWATest',
+      'og:title': 'PWATest',
+      description: 'PWATest',
+      'og:description': 'PWATest',
+      lang: 'ja',
+      theme_color: '#ffffff',
+      background_color: '#ffffff'
+    },
+
     /*
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      
+
     }
   }
 }
