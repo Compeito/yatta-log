@@ -5,6 +5,7 @@ const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
 module.exports = {
   mode: 'universal',
+  srcDir: 'src/',
 
   /*
   ** Headers of the page
