@@ -1,22 +1,31 @@
-# yatta-log
+# やったログ
+「やった」を見える化する
 
-> My cool Nuxt.js project
+## 仕様
+### コンセプト
+ボタンを押すだけで1追加でき、ヒートマップで履歴を見返すことが出来るサービス  
+今日はやった、昨日はやらなかった、もしくはそれらの程度を表で可視化する
 
-## Build Setup
+### 機能
+ - ログの作成、編集、閲覧
+   - 基本設定
+     - タイトル：～ログ
+   - 詳細設定
+     - やったことの単位:～回
+     - ワンタップにつき増える数が1か任意か:1
+     - 自分以外もデータを追加出来るようにするか：しない
+ - ログにデータを追加
+   - 基本ワンタップで1追加
 
-``` bash
-# install dependencies
-$ yarn install
 
-# serve with hot reload at localhost:3000
-$ yarn run dev
-
-# build for production and launch server
-$ yarn run build
-$ yarn start
-
-# generate static project
-$ yarn run generate
-```
-
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+## 必要なページ
+ - /
+   - ログイン、ログイン済みならhomeへリダイレクト
+ - /home
+   - 自分のログが一覧で表示される
+ - /edit
+   - ログをパラメータ無しで新規作成、有りで編集する
+ - /view?l=hogehoge
+   - 閲覧、作成者の場合はデータの追加、削除を行う
+ - /settings
+   - 設定
