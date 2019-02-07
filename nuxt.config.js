@@ -12,6 +12,9 @@ module.exports = {
   */
   head: {
     title: pkg.name,
+    htmlAttrs: {
+      lang: 'ja'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -71,9 +74,9 @@ module.exports = {
     /*
      ** PWA settings
      */
-    workbox: {
-      dev: true
-    },
+    // workbox: {
+    //   dev: true
+    // },
     manifest: {
       name: 'PWATest',
       short_name: 'PWA',
