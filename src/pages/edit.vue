@@ -1,7 +1,15 @@
 <template>
   <v-card>
     <BaseForm ref="form" :fields="fields">
-      <v-btn @click="submit">test</v-btn>
+      <v-btn color="info" @click="submit">
+        <div v-if="!isSubmitting">送信</div>
+        <div v-else>
+          <v-progress-circular
+            indeterminate
+            color="white"
+          ></v-progress-circular>
+        </div>
+      </v-btn>
     </BaseForm>
   </v-card>
 </template>
@@ -12,14 +20,18 @@ import { VTextField, VSelect } from 'vuetify/lib'
 import firebase from '~/plugins/firebase'
 import BaseForm from '~/components/BaseForm'
 
+const db = firebase.firestore()
+
 export default {
   components: { BaseForm },
   data() {
     return {
+      isSubmitting: false,
       fields: [
         {
           component: VTextField,
           label: 'ログの名前',
+          key: 'title',
           model: '',
           counter: 10,
           rules: [
@@ -30,6 +42,7 @@ export default {
         {
           component: VTextField,
           label: 'ログの単位',
+          key: 'unit',
           model: '回',
           rules: [
             v => v.length <= 10 || '10文字までです'
@@ -38,6 +51,7 @@ export default {
         {
           component: VSelect,
           label: '書き込み権限設定',
+          key: 'permission',
           model: 0,
           items: [
             {
@@ -56,8 +70,18 @@ export default {
   methods: {
     submit() {
       const form = this.$refs.form
-      if (form.isValid) {
+      if (form.isValid && !this.isSubmitting) {
+        this.isSubmitting = true
+        const formData = form.getFieldsAsObject()
 
+        db.collection('logs').add(formData)
+          .then(() => {
+            this.$store.commit('alert/activate', '送信完了！')
+            this.isSubmitting = false
+          })
+          .catch(error =>{
+            this.$store.commit('alert/activate', error)
+          })
       }
     }
   }

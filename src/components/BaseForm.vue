@@ -8,7 +8,7 @@
           item-text="text"
           item-value="value"
           :items="field.items"
-          :key="field.label"
+          :key="field.key"
           :is="field.component"
           :rules="field.rules"
           :label="field.label"
@@ -29,6 +29,15 @@ export default {
   data() {
     return {
       isValid: false,
+    }
+  },
+  methods: {
+    getFieldsAsObject() {
+      const obj = {}
+      this.fields.forEach(field => {
+        obj[field.key] = field.model
+      })
+      return obj
     }
   }
 }
