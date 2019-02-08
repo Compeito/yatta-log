@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Navbar from './Navbar'
-import Toolbar from './Toolbar'
+import Navbar from '~/components/Navbar'
+import Toolbar from '~/components/Toolbar'
 import AlertSnackbar from '~/components/AlertSnackbar'
 
 export default {
