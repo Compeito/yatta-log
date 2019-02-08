@@ -5,8 +5,10 @@
     align-center
   >
     <p>{{ user.providerData ? user.providerData[0].displayName : '未ログイン'}}</p>
+    <p v-for="log in logs">
+      <a :href="`/view?l=${log.id}`">{{ log.data().title }}</a>
+    </p>
     <v-btn color="info" @click="signInWithTwitter">ログイン</v-btn>
-
     <v-btn @click="$store.commit('alert/activate', 'test')">アラート</v-btn>
   </v-layout>
 </template>
@@ -15,16 +17,25 @@
 import auth from '~/plugins/auth'
 import firebase from '~/plugins/firebase'
 
+const db = firebase.firestore()
+
 export default {
   data() {
     return {
-      user: {}
+      user: {},
+      logs: []
     }
   },
   mounted() {
     auth().then((user) => {
       this.user = user
     })
+    db.collection('logs').get()
+      .then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+          this.logs.push(doc)
+        })
+      })
   },
   methods: {
     signInWithTwitter() {
