@@ -1,17 +1,23 @@
 <template>
-  <v-card>
-    <BaseForm ref="form" :fields="fields">
-      <v-btn color="info" @click="submit">
-        <div v-if="!isSubmitting">送信</div>
-        <div v-else>
-          <v-progress-circular
-            indeterminate
-            color="white"
-          ></v-progress-circular>
-        </div>
-      </v-btn>
-    </BaseForm>
-  </v-card>
+  <v-layout
+    column
+    justify-center
+    align-center
+  >
+    <v-card>
+      <BaseForm ref="form" :fields="fields">
+        <v-btn color="info" @click="submit">
+          <div v-if="!isSubmitting">送信</div>
+          <div v-else>
+            <v-progress-circular
+              indeterminate
+              color="white"
+            ></v-progress-circular>
+          </div>
+        </v-btn>
+      </BaseForm>
+    </v-card>
+  </v-layout>
 </template>
 
 <script>
@@ -79,7 +85,7 @@ export default {
             this.$store.commit('alert/activate', '送信完了！')
             this.isSubmitting = false
           })
-          .catch(error =>{
+          .catch(error => {
             this.$store.commit('alert/activate', error)
           })
       }
