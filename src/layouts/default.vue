@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-navbar/>
+    <navbar/>
+    <toolbar/>
     <v-content>
       <v-container>
         <nuxt/>
@@ -9,15 +10,16 @@
     <v-footer app>
       <span>&copy; 2019</span>
     </v-footer>
-    <alert-snackbar></alert-snackbar>
+    <alert-snackbar/>
   </v-app>
 </template>
 
 <script>
-import VNavbar from './VNavbar'
+import Navbar from './Navbar'
+import Toolbar from './Toolbar'
 import AlertSnackbar from '~/components/AlertSnackbar'
 
 export default {
-  components: {AlertSnackbar, VNavbar},
+  components: { Navbar, Toolbar, AlertSnackbar },
 }
 </script>
