@@ -41,14 +41,14 @@ export default {
       isOpening: false,
       items: [
         {
-          icon: 'apps',
-          title: 'Welcome',
+          icon: 'home',
+          title: 'ホーム',
           to: '/'
         },
         {
-          icon: 'bubble_chart',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'create',
+          title: '新規作成',
+          to: '/edit'
         }
       ]
     }

@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import auth from '~/plugins/auth'
+
 export default {
   props: {
     'fields': Array
@@ -31,12 +33,18 @@ export default {
       isValid: false,
     }
   },
+  mounted() {
+    auth().then((user) => {
+      this.user = user
+    })
+  },
   methods: {
     getFieldsAsObject() {
       const obj = {}
       this.fields.forEach(field => {
         obj[field.key] = field.model
       })
+      obj.user_id = this.user.uid
       return obj
     }
   }
