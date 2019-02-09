@@ -18,8 +18,14 @@
 import Navbar from '~/components/Navbar'
 import Toolbar from '~/components/Toolbar'
 import AlertSnackbar from '~/components/AlertSnackbar'
+import auth from '~/plugins/auth'
 
 export default {
   components: { Navbar, Toolbar, AlertSnackbar },
+  mounted() {
+    auth().then(user => {
+      this.$store.commit('user/set', user.uid)
+    })
+  }
 }
 </script>
