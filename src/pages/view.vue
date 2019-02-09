@@ -7,6 +7,7 @@
     <template v-if="log">
       <v-card>
         <v-card-title>{{ log.data().title }}</v-card-title>
+        <HeatTable :input="commits"/>
         <v-btn @click="doneCommit">やった</v-btn>
       </v-card>
     </template>
@@ -19,15 +20,18 @@
 </template>
 
 <script>
+import HeatTable from '~/components/HeatTable'
 import firebase from '~/plugins/firebase'
 import moment from 'moment'
 
 const db = firebase.firestore()
 
 export default {
+  components: { HeatTable },
   data() {
     return {
-      log: null
+      log: null,
+      commits: []
     }
   },
   mounted() {
@@ -39,6 +43,7 @@ export default {
           if (!this.log) {
             location.replace('/')
           }
+          this.updateTable()
         })
     } else {
       location.replace('/')
@@ -47,7 +52,7 @@ export default {
   methods: {
     doneCommit() {
       const doneData = {
-        date: moment().format('YYYY-MM-DD_HH-mm-ss'),
+        date: moment().format('YYYY-MM-DD HH:mm:ss'),
         count: 1,
         log_id: this.log.id
       }
@@ -58,6 +63,16 @@ export default {
         .catch(error => {
           this.$store.commit('alert/activate', error)
         })
+    },
+    updateTable() {
+      const commits = []
+      db.collection('doneCommits').where('log_id', '==', this.log.id).get()
+        .then(querySnapshot => {
+          querySnapshot.docs.forEach(doc => {
+            commits.push(doc.data())
+          })
+        })
+      this.commits = commits
     }
   }
 }
