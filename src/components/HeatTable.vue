@@ -34,24 +34,13 @@
 import moment from 'moment'
 
 export default {
+  props: {
+    input: Array
+  },
   data() {
     return {
       inputDate: {},
-      weekRange: 10,
-      input: [
-        {
-          date: '2019-02-09',
-          count: 3
-        },
-        {
-          date: '2019-02-08',
-          count: 2
-        },
-        {
-          date: '2019-02-06',
-          count: 4
-        },
-      ]
+      weekRange: 10
     }
   },
   methods: {
