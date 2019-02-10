@@ -28,7 +28,7 @@ import utils from '../plugins/utils'
 
 export default {
   props: {
-    input: []
+    input: Array
   },
   data() {
     return {

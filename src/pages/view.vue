@@ -5,9 +5,9 @@
     align-center
   >
     <template v-if="log">
-      <v-card>
+      <v-card class="log-card">
         <v-card-title>{{ log.data().title }}</v-card-title>
-        <HeatTable :input="commits"/>
+        <HeatTable class="log-card-table" :input="commits"/>
         <v-btn @click="doneCommit">やった</v-btn>
       </v-card>
     </template>
@@ -63,6 +63,7 @@ export default {
         .catch(error => {
           this.$store.commit('alert/activate', error)
         })
+      this.updateTable()
     },
     updateTable() {
       const commits = []
@@ -77,3 +78,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.log-card {
+  padding: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+.log-card-table {
+  margin-bottom: 20px;
+}
+</style>
