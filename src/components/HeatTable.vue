@@ -1,14 +1,14 @@
 <template>
-  <table>
+  <table v-if="input">
     <thead>
     <tr>
-      <th>日</th>
-      <th>月</th>
-      <th>火</th>
-      <th>水</th>
-      <th>木</th>
-      <th>金</th>
-      <th>土</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>
@@ -16,9 +16,7 @@
       <td
         v-for="day in weekUntil(weekAgo)"
         :style="`background-color: ${rgb(day)}`"
-      >
-        {{ day.format('DD') }}
-      </td>
+      >&nbsp;</td>
     </tr>
     </tbody>
   </table>
@@ -30,7 +28,7 @@ import utils from '../plugins/utils'
 
 export default {
   props: {
-    input: Array
+    input: []
   },
   data() {
     return {
@@ -38,19 +36,39 @@ export default {
     }
   },
   methods: {
+    /**
+     * n週間前の7日間のmomentオブジェクトの配列を返す
+     * @param n
+     * @returns {moment.Moment[]}
+     */
     weekUntil(n) {
       return utils.range(7).map(i => {
         return moment().add(n * -7, 'days').add(i * -1, 'days')
       })
     },
+    /**
+     * this.inputから{dateString: countの合計}のオブジェクトを返す
+     * @private
+     * @returns {Object}
+     */
     _createDataFromInput() {
       const r = {}
       this.input.forEach(data => {
         const dateString = moment(data.date).format('YYYY-MM-DD')
-        r[dateString] = data.count
+        if (dateString in r) {
+          r[dateString] += data.count
+        } else {
+          r[dateString] = data.count
+        }
       })
       return r
     },
+    /**
+     * tdのループの中で得られるmomentオブジェクトと
+     * this._createDataFromInput()の値をもとにrgbカラーを返す
+     * @param date
+     * @returns {string}
+     */
     rgb(date) {
       const dataInput = this._createDataFromInput()
       const maxCountInput = utils.max(Object.values(dataInput))
@@ -66,3 +84,17 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  max-width: 600px;
+  background-color: #bcbcbc;
+}
+th {
+  background-color: #bcbcbc;
+}
+table td {
+  border: solid 1px #eeeeee;
+}
+</style>
