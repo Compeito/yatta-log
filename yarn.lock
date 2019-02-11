@@ -799,6 +799,11 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.12.tgz#cfca32cf1e976eedbe00ddb2f21e28ab01f7e223"
   integrity sha512-1QWhGGu03NjPYk45w5muLq6a43Fhvd5+LGZrPydXLs7/FgQHqW6aSKmJClTwBHP1rynLSLLA7+9E/35cur6g/g==
 
+"@fortawesome/fontawesome-free@^5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.7.1.tgz#e4bdc6fd2a7b5a41d5b599bcb62cf22c78f7f535"
+  integrity sha512-gukWJ7Mwf0WXQbkcwcm5zi8+H8aT5MMnphf5hpydOw898H1ibgm2cyejHgk6Km/FTvrPp5ppUHLrlFwt0QxsQw==
+
 "@jimp/bmp@^0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@jimp/bmp/-/bmp-0.5.4.tgz#b7b375aa774f26154912569864d5466e71333ef1"
