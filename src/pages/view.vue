@@ -16,15 +16,15 @@
         </v-card-title>
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
-          1{{ log.data().unit }}分コミット
+          1{{ log.data().unit }}コミット
         </v-btn>
         <v-dialog
           v-model="dialogIsActive"
           width="500"
         >
-          <v-btn slot="activator">
-            <v-icon>add_circle</v-icon>
-            たくさんコミット
+          <v-btn small slot="activator">
+            <v-icon>add</v-icon>
+            まとめて
           </v-btn>
           <v-card>
             <v-card-title primary-title>

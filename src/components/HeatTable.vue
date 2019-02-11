@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      weekRange: utils.range(10)
+      weekRange: utils.range(7)
     }
   },
   methods: {

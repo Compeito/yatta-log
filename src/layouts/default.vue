@@ -7,7 +7,7 @@
         <nuxt/>
       </v-container>
     </v-content>
-    <v-footer app>
+    <v-footer>
       <span>&copy; 2019</span>
     </v-footer>
     <alert-snackbar/>
