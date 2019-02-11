@@ -9,6 +9,7 @@
       <a :href="`/view?l=${log.id}`">{{ log.data().title }}</a>
     </p>
     <v-btn color="info" @click="signInWithTwitter">ログイン</v-btn>
+    <v-btn color="warning" @click="signOut">ログアウト</v-btn>
     <v-btn @click="$store.commit('alert/activate', 'test')">アラート</v-btn>
   </v-layout>
 </template>
@@ -50,6 +51,13 @@ export default {
         var email = error.email
         var credential = error.credential*/
       })
+    },
+    signOut() {
+      firebase.auth().signOut()
+        .then(() => {
+          this.$store.commit('alert/activate', 'ログアウトしました')
+          this.$store.commit('user/set', '')
+        })
     }
   }
 }
