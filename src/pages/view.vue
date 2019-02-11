@@ -7,7 +7,7 @@
     <template v-if="log">
       <v-card class="log-card">
         <v-card-title>{{ log.data().title }}</v-card-title>
-        <HeatTable class="log-card-table" :input="commits"/>
+        <HeatTable class="log-card-table" :input="commits" :unit="log.data().unit"/>
         <v-btn @click="doneCommit">やった</v-btn>
       </v-card>
     </template>
@@ -85,6 +85,7 @@ export default {
   width: 100%;
   max-width: 600px;
 }
+
 .log-card-table {
   margin-bottom: 20px;
 }

@@ -16,7 +16,12 @@
       <td
         v-for="day in weekUntil(weekAgo)"
         :style="`background-color: ${rgb(day)}`"
-      >&nbsp;</td>
+      >
+        <v-tooltip style="width: 100%" bottom>
+          <div slot="activator">&nbsp;</div>
+          <span>{{ tooltipText(day) }}</span>
+        </v-tooltip>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -28,7 +33,8 @@ import utils from '../plugins/utils'
 
 export default {
   props: {
-    input: Array
+    input: Array,
+    unit: String
   },
   data() {
     return {
@@ -36,6 +42,20 @@ export default {
     }
   },
   methods: {
+    /**
+     * ポップアップ表示する文字列を返す
+     * @param {moment.Moment} day
+     * @returns {String}
+     */
+    tooltipText(day) {
+      const dataInput = this._createDataFromInput()
+      const dateString = day.format('YYYY-MM-DD')
+      let count = 0
+      if (dateString in dataInput) {
+        count = dataInput[dateString]
+      }
+      return day.format('YYYY/MM/DD') + '...' + count.toString() + this.unit
+    },
     /**
      * n週間前の7日間のmomentオブジェクトの配列を返す
      * @param n
@@ -91,9 +111,11 @@ table {
   max-width: 600px;
   background-color: #bcbcbc;
 }
+
 th {
   background-color: #bcbcbc;
 }
+
 table td {
   border: solid 1px #eeeeee;
 }
