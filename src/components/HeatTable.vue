@@ -73,7 +73,8 @@ export default {
      */
     _createDataFromInput() {
       const r = {}
-      this.input.forEach(data => {
+      const commits = this.input ? this.input.map(doc => doc.data()) : []
+      commits.forEach(data => {
         const dateString = moment(data.date).format('YYYY-MM-DD')
         if (dateString in r) {
           r[dateString] += data.count

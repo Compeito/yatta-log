@@ -39,12 +39,7 @@
             </v-layout>
           </v-card>
         </v-dialog>
-        <v-card-actions class="right">
-          <v-btn flat color="info">
-            <v-icon>fab fa-twitter</v-icon>
-            ツイート
-          </v-btn>
-        </v-card-actions>
+        <CommitList :commits="commits" :unit="log.data().unit"/>
       </v-card>
     </template>
     <v-progress-circular
@@ -58,6 +53,7 @@
 <script>
 import HeatTable from '~/components/HeatTable'
 import BaseForm from '~/components/BaseForm'
+import CommitList from '~/components/CommitList'
 import firebase from '~/plugins/firebase'
 import { VTextField } from 'vuetify/lib'
 import moment from 'moment'
@@ -65,7 +61,7 @@ import moment from 'moment'
 const db = firebase.firestore()
 
 export default {
-  components: { BaseForm, HeatTable },
+  components: { CommitList, BaseForm, HeatTable },
   computed: {
     fields() {
       return [
@@ -120,14 +116,10 @@ export default {
       this.updateTable()
     },
     updateTable() {
-      const commits = []
       db.collection('doneCommits').where('log_id', '==', this.log.id).get()
         .then(querySnapshot => {
-          querySnapshot.docs.forEach(doc => {
-            commits.push(doc.data())
-          })
+          this.commits = querySnapshot.docs
         })
-      this.commits = commits
     }
   }
 }
