@@ -1,7 +1,27 @@
 <template>
   <v-list>
+    <v-subheader>履歴</v-subheader>
     <template v-for="commit in sortedCommits">
-      <p class="text-xs-right">{{ commit.data().count }}{{ unit }} - {{ commit.data().date }}</p>
+      <v-divider/>
+
+      <v-list-tile @click="">
+
+        <v-list-tile-content>
+          <v-list-tile-title>
+            <span>
+              {{ commit.data().count }}{{ unit }} - {{ commit.data().date }}
+            </span>
+          </v-list-tile-title>
+        </v-list-tile-content>
+
+        <v-list-tile-action>
+          <v-btn icon ripple>
+            <v-icon flat color="red lighten-1">fas fa-times</v-icon>
+          </v-btn>
+        </v-list-tile-action>
+
+      </v-list-tile>
+
     </template>
   </v-list>
 </template>

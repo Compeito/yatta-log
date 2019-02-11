@@ -39,7 +39,11 @@
             </v-layout>
           </v-card>
         </v-dialog>
-        <CommitList :commits="commits" :unit="log.data().unit"/>
+        <CommitList
+          style="margin-top: 20px;"
+          :commits="commits"
+          :unit="log.data().unit"
+        />
       </v-card>
     </template>
     <v-progress-circular
