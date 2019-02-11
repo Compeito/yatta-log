@@ -75,6 +75,10 @@ export default {
   },
   methods: {
     submit() {
+      if (!this.$store.state.user.id) {
+        this.$store.commit('alert/activate', 'ログインが必要です')
+        return
+      }
       const form = this.$refs.form
       if (form.isValid && !this.isSubmitting) {
         this.isSubmitting = true
