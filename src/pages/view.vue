@@ -43,6 +43,7 @@
           style="margin-top: 20px;"
           :commits="commits"
           :unit="log.data().unit"
+          :update="updateTable"
         />
       </v-card>
     </template>

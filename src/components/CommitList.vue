@@ -15,7 +15,7 @@
         </v-list-tile-content>
 
         <v-list-tile-action>
-          <v-btn icon ripple>
+          <v-btn icon ripple @click="deleteCommit(commit)">
             <v-icon flat color="red lighten-1">fas fa-times</v-icon>
           </v-btn>
         </v-list-tile-action>
@@ -28,11 +28,15 @@
 
 <script>
 import moment from 'moment'
+import firebase from '~/plugins/firebase'
+
+const db = firebase.firestore()
 
 export default {
   props: {
     commits: Array,
-    unit: String
+    unit: String,
+    update: Function
   },
   computed: {
     sortedCommits() {
@@ -47,6 +51,13 @@ export default {
           return 0
         }
       })
+    }
+  },
+  methods: {
+    deleteCommit(commit) {
+      db.collection('doneCommits').doc(commit.id)
+        .delete()
+        .then(this.update)
     }
   }
 }
