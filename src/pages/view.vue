@@ -6,9 +6,22 @@
   >
     <template v-if="log">
       <v-card class="log-card">
-        <v-card-title>{{ log.data().title }}</v-card-title>
-        <HeatTable class="log-card-table" :input="commits" :unit="log.data().unit"/>
-        <v-btn @click="doneCommit">やった</v-btn>
+        <HeatTable
+          class="log-card-table"
+          :input="commits"
+          :unit="log.data().unit"
+        />
+        <v-card-title primary-title>
+          <h3 class="headline mb-0">{{ log.data().title }}</h3>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn flat color="primary" @click="doneCommit">
+            <v-icon>add_circle</v-icon>やった(+1)
+          </v-btn>
+          <v-btn flat color="info">
+            <v-icon>share</v-icon>共有
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </template>
     <v-progress-circular
