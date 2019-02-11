@@ -14,12 +14,35 @@
         <v-card-title primary-title>
           <h3 class="headline mb-0">{{ log.data().title }}</h3>
         </v-card-title>
-        <v-card-actions>
-          <v-btn flat color="primary" @click="doneCommit">
-            <v-icon>add_circle</v-icon>やった(+1)
+        <v-btn @click="doneCommit(1)">
+          <v-icon>add_circle</v-icon>
+          1{{ log.data().unit }}分コミット
+        </v-btn>
+        <v-dialog
+          v-model="dialogIsActive"
+          width="500"
+        >
+          <v-btn slot="activator">
+            <v-icon>add_circle</v-icon>
+            たくさんコミット
           </v-btn>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h4 class="headline mb-0">コミット数を選択</h4>
+                <p>数字を入力してください</p>
+              </div>
+            </v-card-title>
+            <v-layout row style="padding: 20px;">
+              <BaseForm ref="form" :fields="fields"/>
+              <v-btn style="margin: auto" @click="doneCommit(fields[0].model)">コミット</v-btn>
+            </v-layout>
+          </v-card>
+        </v-dialog>
+        <v-card-actions class="right">
           <v-btn flat color="info">
-            <v-icon>share</v-icon>共有
+            <v-icon>fab fa-twitter</v-icon>
+            ツイート
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -34,17 +57,34 @@
 
 <script>
 import HeatTable from '~/components/HeatTable'
+import BaseForm from '~/components/BaseForm'
 import firebase from '~/plugins/firebase'
+import { VTextField } from 'vuetify/lib'
 import moment from 'moment'
 
 const db = firebase.firestore()
 
 export default {
-  components: { HeatTable },
+  components: { BaseForm, HeatTable },
+  computed: {
+    fields() {
+      return [
+        {
+          component: VTextField,
+          key: 'count',
+          model: 1,
+          suffix: this.log ? this.log.data().unit : '',
+          type: 'number',
+          isRequired: true
+        }
+      ]
+    }
+  },
   data() {
     return {
       log: null,
-      commits: []
+      commits: [],
+      dialogIsActive: false
     }
   },
   mounted() {
@@ -63,10 +103,10 @@ export default {
     }
   },
   methods: {
-    doneCommit() {
+    doneCommit(count) {
       const doneData = {
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
-        count: 1,
+        count: parseInt(count),
         log_id: this.log.id
       }
       db.collection('doneCommits').add(doneData)
@@ -76,6 +116,7 @@ export default {
         .catch(error => {
           this.$store.commit('alert/activate', error)
         })
+      this.dialogIsActive = false
       this.updateTable()
     },
     updateTable() {

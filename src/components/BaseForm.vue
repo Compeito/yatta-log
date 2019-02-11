@@ -12,6 +12,8 @@
           :is="field.component"
           :rules="field.rules"
           :label="field.label"
+          :suffix="field.suffix"
+          :type="field.type"
           :counter="field.counter"
           :required="field.isRequired"
         ></component>
