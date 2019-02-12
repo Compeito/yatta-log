@@ -93,11 +93,12 @@ export default {
     if (logID) {
       db.collection('logs').doc(logID).get()
         .then(documentSnapshot => {
-          this.log = documentSnapshot
-          if (!this.log) {
+          if (!documentSnapshot.exists) {
             location.replace('/')
+          } else {
+            this.log = documentSnapshot
+            this.updateTable()
           }
-          this.updateTable()
         })
     } else {
       location.replace('/')
