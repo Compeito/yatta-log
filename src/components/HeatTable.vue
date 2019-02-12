@@ -1,16 +1,5 @@
 <template>
   <table v-if="input">
-    <thead>
-    <tr>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-    </tr>
-    </thead>
     <tbody>
     <tr v-for="weekAgo in weekRange">
       <td
@@ -125,10 +114,6 @@ export default {
 table {
   width: 100%;
   max-width: 600px;
-  background-color: #bcbcbc;
-}
-
-th {
   background-color: #bcbcbc;
 }
 
