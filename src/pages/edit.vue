@@ -6,7 +6,8 @@
   >
     <v-card>
       <BaseForm ref="form" :fields="fields">
-        <v-btn color="info" @click="submit">
+        <v-swatches v-model="fields[3].model"/>
+        <v-btn color="info" @click="submit" style="margin-top: 20px">
           <div v-if="!isSubmitting">送信</div>
           <div v-else>
             <v-progress-circular
@@ -22,6 +23,8 @@
 
 <script>
 import { VTextField, VSelect } from 'vuetify/lib'
+import VSwatches from 'vue-swatches'
+import 'vue-swatches/dist/vue-swatches.min.css'
 
 import firebase from '~/plugins/firebase'
 import BaseForm from '~/components/BaseForm'
@@ -29,7 +32,7 @@ import BaseForm from '~/components/BaseForm'
 const db = firebase.firestore()
 
 export default {
-  components: { BaseForm },
+  components: { BaseForm, VSwatches },
   data() {
     return {
       isSubmitting: false,
@@ -41,7 +44,8 @@ export default {
           model: '',
           counter: 10,
           rules: [
-            v => v.length <= 10 || '10文字までです'
+            v => v.length <= 10 || '10文字までです',
+            v => v !== '' || '入力して下さい'
           ],
           isRequired: true
         },
@@ -70,6 +74,12 @@ export default {
             }
           ],
         },
+        {
+          component: VTextField,
+          label: 'コミットカラー',
+          key: 'color',
+          model: '#1FBC9C',
+        },
       ]
     }
   },
@@ -80,7 +90,7 @@ export default {
         return
       }
       const form = this.$refs.form
-      if (form.isValid && !this.isSubmitting) {
+      if (form.validate() && !this.isSubmitting) {
         this.isSubmitting = true
         const formData = form.getFieldsAsObject()
 

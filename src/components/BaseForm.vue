@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="isValid">
+  <v-form ref="innerForm" v-model="isValid">
     <v-container>
       <v-layout column>
         <component
@@ -41,6 +41,9 @@ export default {
     })
   },
   methods: {
+    validate() {
+      return this.$refs.innerForm.validate()
+    },
     getFieldsAsObject() {
       const obj = {}
       this.fields.forEach(field => {
