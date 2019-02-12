@@ -16,6 +16,7 @@
           :type="field.type"
           :counter="field.counter"
           :required="field.isRequired"
+          :readonly="field.readonly"
         ></component>
         <slot></slot>
       </v-layout>

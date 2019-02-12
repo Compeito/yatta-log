@@ -6,7 +6,7 @@
   >
     <v-card>
       <BaseForm ref="form" :fields="fields">
-        <v-swatches v-model="fields[3].model"/>
+        <v-swatches colors="material-dark" v-model="fields[3].model"/>
         <v-btn color="info" @click="submit" style="margin-top: 20px">
           <div v-if="!isSubmitting">送信</div>
           <div v-else>
@@ -57,6 +57,7 @@ export default {
           rules: [
             v => v.length <= 10 || '10文字までです'
           ],
+          isRequired: true
         },
         {
           component: VSelect,
@@ -73,12 +74,15 @@ export default {
               value: 1
             }
           ],
+          isRequired: true
         },
         {
           component: VTextField,
           label: 'コミットカラー',
           key: 'color',
           model: '#1FBC9C',
+          isRequired: true,
+          readonly: true
         },
       ]
     }
