@@ -9,14 +9,14 @@
         <HeatTable
           class="log-card-table"
           :input="commits"
-          :unit="log.data().unit"
+          :log="log"
         />
         <v-card-title primary-title>
           <h3 class="headline mb-0">{{ log.data().title }}</h3>
         </v-card-title>
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
-          1{{ log.data().unit }}コミット
+          1{{ log.data().unit }}
         </v-btn>
         <v-dialog
           v-model="dialogIsActive"

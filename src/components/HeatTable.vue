@@ -29,16 +29,29 @@
 
 <script>
 import moment from 'moment'
-import utils from '../plugins/utils'
+import utils from '~/plugins/utils'
+import firebase from '~/plugins/firebase'
 
 export default {
   props: {
     input: Array,
-    unit: String
+    log: firebase.firestore.DocumentSnapshot
   },
   data() {
     return {
       weekRange: utils.range(7)
+    }
+  },
+  computed: {
+    logColor() {
+      if (this.log) {
+        const code = this.log.data().color
+        return {
+          r: parseInt(code.substring(1, 3), 16),
+          g: parseInt(code.substring(3, 5), 16),
+          b: parseInt(code.substring(5, 7), 16)
+        }
+      }
     }
   },
   methods: {
@@ -54,7 +67,7 @@ export default {
       if (dateString in dataInput) {
         count = dataInput[dateString]
       }
-      return day.format('YYYY/MM/DD') + '...' + count.toString() + this.unit
+      return day.format('YYYY/MM/DD') + '...' + count.toString() + this.log.data().unit
     },
     /**
      * n週間前の7日間のmomentオブジェクトの配列を返す
@@ -96,11 +109,13 @@ export default {
       const dateString = date.format('YYYY-MM-DD')
       if (dateString in dataInput) {
         const currentData = dataInput[dateString]
-        const color = Math.ceil(255 * currentData / maxCountInput)
 
-        return `rgb(255, ${(255 - color).toString()}, 255)`
+        const color = this.logColor
+        const colorRate = (currentData / maxCountInput).toFixed(2)
+
+        return `rgba(${color.r}, ${color.g}, ${color.b}, ${colorRate})`
       }
-      return 'rgb(255, 255, 255)'
+      return 'white'
     }
   }
 }
