@@ -131,14 +131,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.log-card {
-  padding: 10px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.log-card-table {
-  margin-bottom: 20px;
-}
-</style>

@@ -26,18 +26,16 @@
 <script>
 export default {
   computed: {
-    isActive:{
+    isActive: {
       get() {
         return this.$store.state.navbar.isActive
       },
       set(value) {
         return this.$store.commit('navbar/set', value)
       }
-    }
-  },
-  data: () => {
-    return {
-      items: [
+    },
+    items() {
+      const itemList = [
         {
           icon: 'home',
           title: 'ホーム',
@@ -49,6 +47,16 @@ export default {
           to: '/edit'
         }
       ]
+      if (this.$store.state.user.id !== '') {
+        itemList.push(
+          {
+            icon: 'logout',
+            title: 'ログアウト',
+            to: '/?e=logout'
+          }
+        )
+      }
+      return itemList
     }
   }
 }

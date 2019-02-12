@@ -25,11 +25,13 @@ export default {
   components: { Navbar, Toolbar, AlertSnackbar },
   mounted() {
     auth().then(user => {
-      this.$store.commit('user/set', user.uid)
-      firebase.firestore().collection('users').doc(user.uid).set({
-        displayName: user.displayName,
-        photoURL: user.photoURL
-      })
+      this.$store.commit('user/set', user.uid ? user.uid : '')
+      if (user) {
+        firebase.firestore().collection('users').doc(user.uid).set({
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        })
+      }
     })
   }
 }
