@@ -7,7 +7,7 @@
     <v-btn
       color="info"
       @click="signInWithTwitter"
-      v-show="!$store.state.user.id"
+      v-show="needSignIn"
     >ログイン
     </v-btn>
 
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import auth from '~/plugins/auth'
 import firebase from '~/plugins/firebase'
 import LogCard from '../components/LogCard'
 
@@ -35,6 +34,11 @@ const db = firebase.firestore()
 
 export default {
   components: { LogCard },
+  computed: {
+    needSignIn() {
+      return !this.$store.state.user.id
+    }
+  },
   data() {
     return {
       logs: []
@@ -57,17 +61,10 @@ export default {
       const provider = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          this.$store.commit('user/set', user.id)
+          this.$store.commit('user/set', result.user.uid)
         })
         .catch((error) => {
           this.$store.commit('alert/activate', error)
-        })
-    },
-    signOut() {
-      firebase.auth().signOut()
-        .then(() => {
-          this.$store.commit('alert/activate', 'ログアウトしました')
-          this.$store.commit('user/set', '')
         })
     }
   }
