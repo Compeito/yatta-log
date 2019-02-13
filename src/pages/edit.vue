@@ -4,9 +4,9 @@
     justify-center
     align-center
   >
-    <v-card>
+    <v-card class="log-card">
       <BaseForm ref="form" :fields="fields">
-        <v-swatches colors="material-dark" v-model="fields[3].model"/>
+        <v-swatches colors="material-dark" v-model="fields[2].model"/>
         <v-btn color="info" @click="submit" style="margin-top: 20px">
           <div v-if="!isSubmitting">送信</div>
           <div v-else>
@@ -59,7 +59,7 @@ export default {
           ],
           isRequired: true
         },
-        {
+        /*{
           component: VSelect,
           label: '書き込み権限設定',
           key: 'permission',
@@ -75,7 +75,7 @@ export default {
             }
           ],
           isRequired: true
-        },
+        },*/
         {
           component: VTextField,
           label: 'コミットカラー',

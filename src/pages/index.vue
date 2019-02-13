@@ -5,7 +5,7 @@
     align-center
   >
     <h1>やったログ</h1>
-    <p>やったことの履歴を残すWebアプリ</p>
+    <p>やった履歴を色で残そう</p>
     <p>
       <v-btn
         color="info"
@@ -24,7 +24,7 @@
     </p>
 
     <h2>みんなのログ</h2>
-    <template v-if="logs">
+    <template v-if="isLoaded">
       <LogCard
         v-for="log in logs"
         :log="log"
@@ -54,10 +54,11 @@ export default {
   },
   data() {
     return {
-      logs: []
+      logs: [],
+      isLoaded: false
     }
   },
-  mounted() {
+  created() {
     if (this.$route.query.e === 'logout') {
       this.signOut()
       this.$router.push('/')
@@ -65,6 +66,7 @@ export default {
     db.collection('logs').get()
       .then(querySnapshot => {
         this.logs = querySnapshot.docs
+        this.isLoaded = true
       })
   },
   methods: {
