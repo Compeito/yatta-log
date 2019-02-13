@@ -48,6 +48,11 @@ export default {
           icon: 'create',
           title: '新規作成',
           to: '/edit'
+        },
+        {
+          icon: 'format_list_bulleted',
+          title: 'ログ一覧',
+          to: '/logs'
         }
       ]
       if (this.$store.state.user.id) {
