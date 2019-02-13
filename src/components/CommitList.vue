@@ -9,12 +9,12 @@
         <v-list-tile-content>
           <v-list-tile-title>
             <span>
-              {{ commit.data().count }}{{ unit }} - {{ commit.data().date }}
+              {{ commit.data().count }}{{ log.data().unit }} - {{ commit.data().date }}
             </span>
           </v-list-tile-title>
         </v-list-tile-content>
 
-        <v-list-tile-action>
+        <v-list-tile-action v-show="isUsersLog">
           <v-btn icon ripple @click="deleteCommit(commit)">
             <v-icon flat color="red lighten-1">fas fa-times</v-icon>
           </v-btn>
@@ -35,7 +35,7 @@ const db = firebase.firestore()
 export default {
   props: {
     commits: Array,
-    unit: String,
+    log: firebase.firestore.DocumentSnapshot,
     update: Function
   },
   computed: {
@@ -51,6 +51,9 @@ export default {
           return 0
         }
       })
+    },
+    isUsersLog() {
+      return this.$store.state.user.id === this.log.data().user_id
     }
   },
   methods: {

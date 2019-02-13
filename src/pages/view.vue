@@ -37,7 +37,7 @@
         <CommitList
           style="margin-top: 20px;"
           :commits="commits"
-          :unit="log.data().unit"
+          :log="log"
           :update="updateTable"
         />
       </v-card>
