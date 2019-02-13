@@ -94,14 +94,14 @@ export default {
       db.collection('logs').doc(logID).get()
         .then(documentSnapshot => {
           if (!documentSnapshot.exists) {
-            location.replace('/')
+            this.$router.push('/')
           } else {
             this.log = documentSnapshot
             this.updateTable()
           }
         })
     } else {
-      location.replace('/')
+      this.$router.push('/')
     }
   },
   methods: {

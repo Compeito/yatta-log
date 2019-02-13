@@ -47,7 +47,7 @@ export default {
   mounted() {
     if (this.$route.query.e === 'logout') {
       this.signOut()
-      location.replace('/')
+      this.$router.push('/')
     }
     db.collection('logs').get()
       .then(querySnapshot => {
