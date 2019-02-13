@@ -6,7 +6,7 @@
   >
     <template v-if="log">
       <LogCard :log="log"/>
-      <v-card class="log-card">
+      <v-card class="log-card" v-show="log.data().user_id === $store.state.user.id">
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
           1{{ log.data().unit }}
@@ -32,6 +32,8 @@
             </v-layout>
           </v-card>
         </v-dialog>
+      </v-card>
+      <v-card class="log-card">
         <CommitList
           style="margin-top: 20px;"
           :commits="commits"
