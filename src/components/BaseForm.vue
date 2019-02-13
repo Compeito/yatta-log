@@ -26,6 +26,7 @@
 
 <script>
 import auth from '~/plugins/auth'
+import moment from 'moment'
 
 export default {
   props: {
@@ -51,6 +52,7 @@ export default {
         obj[field.key] = field.model
       })
       obj.user_id = this.user.uid
+      obj.createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
       return obj
     }
   }

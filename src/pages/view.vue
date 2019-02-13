@@ -22,16 +22,20 @@
           <v-card>
             <v-card-title primary-title>
               <div>
-                <h4 class="headline mb-0">コミット数を選択</h4>
+                <h4 class="headline mb-0">まとめて入力</h4>
                 <p>数字を入力してください</p>
               </div>
             </v-card-title>
             <v-layout row style="padding: 20px;">
               <BaseForm ref="form" :fields="fields"/>
-              <v-btn style="margin: auto" @click="doneCommit(fields[0].model)">コミット</v-btn>
+              <v-btn style="margin: auto" @click="doneCommit(fields[0].model)">送信</v-btn>
             </v-layout>
           </v-card>
         </v-dialog>
+        <v-btn flat small :to="`/edit?l=${log.id}`" class="right">
+          <v-icon small>edit</v-icon>
+          編集
+        </v-btn>
       </v-card>
       <v-card class="log-card">
         <CommitList

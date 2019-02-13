@@ -5,6 +5,11 @@
     align-center
   >
     <v-card class="log-card">
+      <v-card-title>
+        <h1 v-if="isNew">ログの新規作成</h1>
+        <h1 v-else-if="!log">読み込み中…</h1>
+        <h1 v-else>{{ log.data().title }}の編集</h1>
+      </v-card-title>
       <BaseForm ref="form" :fields="fields">
         <v-swatches colors="material-dark" v-model="fields[2].model"/>
         <v-btn color="info" @click="submit" style="margin-top: 20px">
@@ -35,13 +40,19 @@ export default {
   components: { BaseForm, VSwatches },
   data() {
     return {
+      log: null,
+      isNew: true,
       isSubmitting: false,
-      fields: [
+    }
+  },
+  computed: {
+    fields() {
+      return [
         {
           component: VTextField,
           label: 'ログの名前',
           key: 'title',
-          model: '',
+          model: this.log ? this.log.data().title : '',
           counter: 10,
           rules: [
             v => v.length <= 10 || '10文字までです',
@@ -53,7 +64,7 @@ export default {
           component: VTextField,
           label: 'ログの単位',
           key: 'unit',
-          model: '回',
+          model: this.log ? this.log.data().unit : '回',
           rules: [
             v => v.length <= 10 || '10文字までです'
           ],
@@ -80,11 +91,25 @@ export default {
           component: VTextField,
           label: 'コミットカラー',
           key: 'color',
-          model: '#1FBC9C',
+          model: this.log ? this.log.data().color : '#1FBC9C',
           isRequired: true,
           readonly: true
         },
       ]
+    }
+  },
+  mounted() {
+    const logID = this.$route.query.l
+    if (logID) {
+      this.isNew = false
+      db.collection('logs').doc(logID).get()
+        .then(documentSnapshot => {
+          if (!documentSnapshot.exists) {
+            this.$router.push('/edit')
+          } else {
+            this.log = documentSnapshot
+          }
+        })
     }
   },
   methods: {
@@ -98,14 +123,25 @@ export default {
         this.isSubmitting = true
         const formData = form.getFieldsAsObject()
 
-        db.collection('logs').add(formData)
-          .then(() => {
-            this.$store.commit('alert/activate', '送信完了！')
-            this.isSubmitting = false
-          })
-          .catch(error => {
-            this.$store.commit('alert/activate', error)
-          })
+        if (this.isNew) {
+          db.collection('logs').add(formData)
+            .then(() => {
+              this.$store.commit('alert/activate', '送信完了！')
+              this.isSubmitting = false
+            })
+            .catch(error => {
+              this.$store.commit('alert/activate', error)
+            })
+        } else {
+          db.collection('logs').doc(this.log.id).update(formData)
+            .then(() => {
+              this.$store.commit('alert/activate', '送信完了！')
+              this.isSubmitting = false
+            })
+            .catch(error => {
+              this.$store.commit('alert/activate', error)
+            })
+        }
       }
     }
   }
