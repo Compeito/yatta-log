@@ -4,13 +4,19 @@
     justify-center
     align-center
   >
-    <v-btn
-      color="info"
-      @click="signInWithTwitter"
-      v-show="needSignIn"
-    >ログイン
-    </v-btn>
+    <h1>やったログ</h1>
+    <p>やったことの履歴を残すWebアプリ</p>
+    <p>
+      <v-btn
+        color="info"
+        @click="signInWithTwitter"
+        v-show="needSignIn"
+      >
+        <v-icon>fab fa-twitter</v-icon>ログイン
+      </v-btn>
+    </p>
 
+    <h2>みんなのログ</h2>
     <template v-if="logs">
       <LogCard
         v-for="log in logs"
@@ -51,9 +57,7 @@ export default {
     }
     db.collection('logs').get()
       .then(querySnapshot => {
-        querySnapshot.docs.forEach(doc => {
-          this.logs.push(doc)
-        })
+        this.logs = querySnapshot.docs
       })
   },
   methods: {
@@ -61,6 +65,7 @@ export default {
       const provider = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
+          this.$store.commit('alert/activate', 'ログイン完了！')
           this.$store.commit('user/set', result.user.uid)
         })
         .catch((error) => {

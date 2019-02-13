@@ -10,9 +10,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      title: 'Vuetify.js'
+  computed: {
+    title() {
+      return this.$route.path === '/' ? '' : 'YattaLog'
     }
   }
 }

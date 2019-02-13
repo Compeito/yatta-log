@@ -1,16 +1,16 @@
 <template>
   <v-card class="log-card">
-    <HeatTable
-      class="log-card-table"
-      :input="commits"
-      :log="log"
-    />
     <v-card-title primary-title>
-      <h3 class="headline mb-0">
+      <h2>
         <nuxt-link :to="`/view?l=${log.id}`">
           {{ log.data().title }}
         </nuxt-link>
-      </h3>
+      </h2>
+      <HeatTable
+        class="log-card-table"
+        :input="commits"
+        :log="log"
+      />
     </v-card-title>
   </v-card>
 </template>
