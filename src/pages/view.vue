@@ -5,7 +5,7 @@
     align-center
   >
     <template v-if="log">
-      <LogCard :log="log"/>
+      <LogCard ref="logCard" :log="log"/>
       <v-card class="log-card" v-show="log.data().user_id === $store.state.user.id">
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
@@ -125,9 +125,10 @@ export default {
       db.collection('doneCommits').where('log_id', '==', this.log.id).get()
         .then(querySnapshot => {
           this.commits = querySnapshot.docs
+          // LogCardは初期状態しか持たないので更新と同時に流し込む
+          this.$refs.logCard.update(querySnapshot.docs)
         })
     }
   }
 }
 </script>
-

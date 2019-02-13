@@ -36,6 +36,11 @@ export default {
       .then(querySnapshot => {
         this.commits = querySnapshot.docs
       })
+  },
+  methods: {
+    update(commits) {
+      this.commits = commits
+    }
   }
 }
 </script>
