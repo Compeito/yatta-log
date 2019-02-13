@@ -125,18 +125,18 @@ export default {
 
         if (this.isNew) {
           db.collection('logs').add(formData)
-            .then(() => {
+            .then((log) => {
               this.$store.commit('alert/activate', '送信完了！')
-              this.isSubmitting = false
+              this.$router.push(`/view?l=${log.id}`)
             })
             .catch(error => {
               this.$store.commit('alert/activate', error)
             })
         } else {
           db.collection('logs').doc(this.log.id).update(formData)
-            .then(() => {
+            .then((log) => {
               this.$store.commit('alert/activate', '送信完了！')
-              this.isSubmitting = false
+              this.$router.push(`/view?l=${log.id}`)
             })
             .catch(error => {
               this.$store.commit('alert/activate', error)

@@ -63,7 +63,7 @@ export default {
       this.signOut()
       this.$router.push('/')
     }
-    db.collection('logs').orderBy('createdAt').limit(5).get()
+    db.collection('logs').orderBy('createdAt', 'desc').limit(5).get()
       .then(querySnapshot => {
         this.logs = querySnapshot.docs
         this.isLoaded = true
