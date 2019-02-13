@@ -10,9 +10,16 @@
       <v-btn
         color="info"
         @click="signInWithTwitter"
-        v-show="needSignIn"
+        v-if="needSignIn"
       >
         <v-icon>fab fa-twitter</v-icon>ログイン
+      </v-btn>
+      <v-btn
+        color="secondary"
+        to="/edit"
+        v-else
+      >
+        <v-icon>edit</v-icon>ログを作る
       </v-btn>
     </p>
 

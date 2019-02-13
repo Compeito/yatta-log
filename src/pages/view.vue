@@ -5,15 +5,8 @@
     align-center
   >
     <template v-if="log">
+      <LogCard :log="log"/>
       <v-card class="log-card">
-        <HeatTable
-          class="log-card-table"
-          :input="commits"
-          :log="log"
-        />
-        <v-card-title primary-title>
-          <h3 class="headline mb-0">{{ log.data().title }}</h3>
-        </v-card-title>
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
           1{{ log.data().unit }}
@@ -59,6 +52,7 @@
 import HeatTable from '~/components/HeatTable'
 import BaseForm from '~/components/BaseForm'
 import CommitList from '~/components/CommitList'
+import LogCard from '~/components/LogCard'
 import firebase from '~/plugins/firebase'
 import { VTextField } from 'vuetify/lib'
 import moment from 'moment'
@@ -66,7 +60,7 @@ import moment from 'moment'
 const db = firebase.firestore()
 
 export default {
-  components: { CommitList, BaseForm, HeatTable },
+  components: { LogCard, CommitList, BaseForm, HeatTable },
   computed: {
     fields() {
       return [
