@@ -7,6 +7,7 @@
         </nuxt-link>
       </h2>
       <HeatTable
+        :id="`log-${log.id}`"
         :input="commits"
         :log="log"
       />

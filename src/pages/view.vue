@@ -5,7 +5,7 @@
     align-center
   >
     <template v-if="log">
-      <LogCard :id="`log-${log.id}`" ref="logCard" :log="log">
+      <LogCard ref="logCard" :log="log">
         <v-btn
           small
           color="info"
