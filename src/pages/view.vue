@@ -156,11 +156,19 @@ export default {
         })
     },
     _uploadCanvas(canvas, filepath) {
+      const fileRef = storage.ref().child(filepath)
       canvas.toBlob(blob => {
-        const fileRef = storage.ref().child(filepath)
         fileRef.put(blob)
+          .then((file) => {
+            file.ref.getDownloadURL()
+              .then(url => {
+                db.collection('logs').doc(this.log.id).update({
+                  filepath: filepath,
+                  fileUrl: url
+                })
+              })
+          })
       })
-      db.collection('logs').doc(this.log.id).update({ filepath: filepath })
     },
     _updateOGPImage(canvas) {
       const filepath = `ogp/${this.log.id}/${moment().format('YYYYMMDDHHmmss')}.jpg`
@@ -169,7 +177,7 @@ export default {
           const oldFilepath = doc.data().filepath
           if (oldFilepath) {
             storage.ref().child(oldFilepath).delete()
-              .then(() => {
+              .finally(() => {
                 this._uploadCanvas(canvas, filepath)
               })
           } else {

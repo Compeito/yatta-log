@@ -10,16 +10,17 @@ const db = admin.firestore()
 
 function htmlForOGP(log) {
   const logData = log.data()
-  return `<!DOCTYPE html><head>
+  return `<!DOCTYPE html><head lang="ja">
+  <meta charset="UTF-8"/>
   <title>${logData.title}</title>
   <meta property="og:title" content="${logData.title}">
-  <meta property="og:image" content="${logData.image}">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="${logData.fileUrl}">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${logData.title}">
-  <meta name="twitter:image" content="${logData.image}">
-  <link rel="canonical" href="/@note/${log.id}">
+  <meta name="twitter:image" content="${logData.fileUrl}">
+  <link rel="canonical" href="/view/?l=${log.id}">
   </head><body>
-  <script>//window.location="/view?l=${log.id}";</script>
+  <script>window.location="/view/?l=${log.id}";</script>
   </body></html>`
 }
 
@@ -32,6 +33,7 @@ exports.logShare = functions.https.onRequest(function(req, res) {
       res.status(200).end(html)
     })
     .catch(err => {
+      console.error(err)
       res.status(500).end(`id:${logID} is not found.`)
     })
 })
