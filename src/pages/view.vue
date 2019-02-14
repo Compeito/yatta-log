@@ -5,7 +5,13 @@
     align-center
   >
     <template v-if="log">
-      <LogCard ref="logCard" :log="log"/>
+      <LogCard :id="`log-${log.id}`" ref="logCard" :log="log"/>
+      <v-card class="log-card">
+        <v-btn small color="info" class="right" @click="tweet">
+          <v-icon small>fab fa-twitter</v-icon>
+          ツイート
+        </v-btn>
+      </v-card>
       <v-card class="log-card" v-show="log.data().user_id === $store.state.user.id">
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
@@ -51,6 +57,14 @@
       color="info"
       v-else
     ></v-progress-circular>
+    <v-dialog v-model="isUploading" width="500">
+      <v-card style="width: 100%;">
+        <v-progress-circular
+          indeterminate
+          color="info"
+        ></v-progress-circular>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -60,10 +74,13 @@ import BaseForm from '~/components/BaseForm'
 import CommitList from '~/components/CommitList'
 import LogCard from '~/components/LogCard'
 import firebase from '~/plugins/firebase'
+
 import { VTextField } from 'vuetify/lib'
 import moment from 'moment'
+import html2canvas from 'html2canvas'
 
 const db = firebase.firestore()
+const storage = firebase.storage()
 
 export default {
   components: { LogCard, CommitList, BaseForm, HeatTable },
@@ -85,7 +102,8 @@ export default {
     return {
       log: null,
       commits: [],
-      dialogIsActive: false
+      dialogIsActive: false,
+      isUploading: false
     }
   },
   mounted() {
@@ -127,6 +145,50 @@ export default {
           this.commits = querySnapshot.docs
           // LogCardは初期状態しか持たないので更新と同時に流し込む
           this.$refs.logCard.update(querySnapshot.docs)
+        })
+    },
+    _uploadCanvas(canvas, filepath) {
+      canvas.toBlob(blob => {
+        const fileRef = storage.ref().child(filepath)
+        fileRef.put(blob)
+      })
+      db.collection('logs').doc(this.log.id).update({ filepath: filepath })
+    },
+    _updateOGPImage(canvas) {
+      const filepath = `ogp/${this.log.id}/${moment().format('YYYYMMDDHHmmss')}.jpg`
+      db.collection('logs').doc(this.log.id).get()
+        .then((doc) => {
+          const oldFilepath = doc.data().filepath
+          if (oldFilepath) {
+            storage.ref().child(oldFilepath).delete()
+              .then(() => {
+                this._uploadCanvas(canvas, filepath)
+              })
+          } else {
+            this._uploadCanvas(canvas, filepath)
+          }
+        })
+    },
+    _createTweetIntentURL() {
+      return encodeURI(
+        'https://twitter.com/intent/tweet'
+        + `?text=${this.log.data().title}`
+        + `&hashtags=${'やったログ'}`
+        + `&url=${location.origin}/share/${this.log.id}`
+      )
+    },
+    tweet() {
+      this.isUploading = true
+      html2canvas(document.querySelector(`#log-${this.log.id}`))
+        .then(canvas => {
+          this._updateOGPImage(canvas)
+        })
+        .catch(error => {
+          this.$store.commit('alert/activate', error)
+        })
+        .finally(() => {
+          this.isUploading = false
+          open(this._createTweetIntentURL(), '_blank')
         })
     }
   }
