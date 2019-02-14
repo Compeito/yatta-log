@@ -9,6 +9,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/share/**",
+        "function": "logShare"
+      }
     ]
   }
 }

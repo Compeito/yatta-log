@@ -86,3 +86,4 @@ sw.*
 # Firebase
 .firebase
 .firebaserc
+serviceAccountKey.json
