@@ -1,8 +1,9 @@
 {
   "name": "yatta-log",
+  "title": "やったログ",
   "version": "1.0.0",
-  "description": "My cool Nuxt.js project",
-  "author": "",
+  "description": "やった履歴を色で残そう",
+  "author": "ugo_compeito",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development HOST=0.0.0.0 nodemon src/server/index.js --watch server",
