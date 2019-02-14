@@ -7,10 +7,10 @@
         </nuxt-link>
       </h2>
       <HeatTable
-        class="log-card-table"
         :input="commits"
         :log="log"
       />
+      <slot></slot>
     </v-card-title>
   </v-card>
 </template>

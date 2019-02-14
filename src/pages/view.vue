@@ -5,14 +5,25 @@
     align-center
   >
     <template v-if="log">
-      <LogCard :id="`log-${log.id}`" ref="logCard" :log="log"/>
-      <v-card class="log-card">
-        <v-btn small color="info" class="right" @click="tweet">
+      <LogCard :id="`log-${log.id}`" ref="logCard" :log="log">
+        <v-btn
+          small
+          color="info"
+          style="margin-left: auto"
+          v-show="isUsersLog"
+          @click="tweet"
+        >
           <v-icon small>fab fa-twitter</v-icon>
           ツイート
+          <v-progress-circular
+            indeterminate
+            color="white"
+            size="16"
+            v-show="isUploading"
+          ></v-progress-circular>
         </v-btn>
-      </v-card>
-      <v-card class="log-card" v-show="log.data().user_id === $store.state.user.id">
+      </LogCard>
+      <v-card class="log-card" v-show="isUsersLog">
         <v-btn @click="doneCommit(1)">
           <v-icon>add_circle</v-icon>
           1{{ log.data().unit }}
@@ -57,14 +68,6 @@
       color="info"
       v-else
     ></v-progress-circular>
-    <v-dialog v-model="isUploading" width="500">
-      <v-card style="width: 100%;">
-        <v-progress-circular
-          indeterminate
-          color="info"
-        ></v-progress-circular>
-      </v-card>
-    </v-dialog>
   </v-layout>
 </template>
 
@@ -96,6 +99,11 @@ export default {
           isRequired: true
         }
       ]
+    },
+    isUsersLog() {
+      if (this.log) {
+        return this.log.data().user_id === this.$store.state.user.id
+      }
     }
   },
   data() {
