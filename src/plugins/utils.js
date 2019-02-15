@@ -16,4 +16,12 @@ function range(n) {
   return r
 }
 
-export default { max, range }
+function randint(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function choice(list) {
+  return list[randint(0, list.length - 1)]
+}
+
+export default { max, range, randint, choice }

@@ -21,10 +21,10 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description },
       { hid: 'og:title', property: 'og:title', content: pkg.title },
-      { hid: 'og:image', property: 'og:image', content: 'https://yatta-log.firebaseapp.com/icon.png' },
-      { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+      { hid: 'og:image', property: 'og:image', content: 'https://yatta-log.firebaseapp.com/ogp.png' },
+      { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
       { hid: 'twitter:title', name: 'twitter:title', content: pkg.title },
-      { hid: 'twitter:image', name: 'twitter:image', content: 'https://yatta-log.firebaseapp.com/icon.png' },
+      { hid: 'twitter:image', name: 'twitter:image', content: 'https://yatta-log.firebaseapp.com/ogp.png' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

@@ -12,50 +12,51 @@
         @click="signInWithTwitter"
         v-if="needSignIn"
       >
-        <v-icon>fab fa-twitter</v-icon>ログイン
+        <v-icon>fab fa-twitter</v-icon>
+        ログイン
       </v-btn>
       <v-btn
         color="secondary"
         to="/edit"
         v-else
       >
-        <v-icon>edit</v-icon>ログを作る
+        <v-icon>edit</v-icon>
+        ログを作る
       </v-btn>
     </p>
 
-    <h2>みんなのログ</h2>
-    <template v-if="isLoaded">
-      <LogCard
-        v-for="log in logs"
-        :log="log"
-        :key="log.id"
-      />
-    </template>
-    <v-progress-circular
-      indeterminate
-      color="info"
-      v-else
-    ></v-progress-circular>
+    <h2 style="margin-top: 20px">こんな感じのが作れます</h2>
+    <v-card class="log-card">
+      <v-card-title primary-title>
+        <h2>{{ log.title }}</h2>
+        <HeatTableTest
+          :input="commits"
+          :log="log"
+        />
+        <slot></slot>
+      </v-card-title>
+    </v-card>
   </v-layout>
 </template>
 
 <script>
 import firebase from '~/plugins/firebase'
-import LogCard from '../components/LogCard'
-
-const db = firebase.firestore()
+import HeatTableTest from '~/components/HeatTableTest'
+import utils from '~/plugins/utils'
+import moment from 'moment'
 
 export default {
-  components: { LogCard },
+  components: { HeatTableTest },
   computed: {
     needSignIn() {
       return !this.$store.state.user.id
     }
   },
   data() {
+    const logSampleData = this.logSample()
     return {
-      logs: [],
-      isLoaded: false
+      log: logSampleData,
+      commits: this.commitsSample(logSampleData)
     }
   },
   created() {
@@ -63,11 +64,6 @@ export default {
       this.signOut()
       this.$router.push('/')
     }
-    db.collection('logs').orderBy('createdAt', 'desc').limit(5).get()
-      .then(querySnapshot => {
-        this.logs = querySnapshot.docs
-        this.isLoaded = true
-      })
   },
   methods: {
     signInWithTwitter() {
@@ -80,7 +76,44 @@ export default {
         .catch((error) => {
           this.$store.commit('alert/activate', error)
         })
-    }
+    },
+    commitsSample(log) {
+      return utils.range(49).map(i => {
+        let rnd = utils.randint(0, log.b)
+        if (rnd < log.a) {
+          return {}
+        }
+        return {
+          date: moment().add(-i, 'days').format('YYYY-MM-DD HH:mm:ss'),
+          count: rnd
+        }
+      })
+    },
+    logSample() {
+      return utils.choice([
+        {
+          title: 'やったログ',
+          color: '#689F38',
+          unit: 'コミット',
+          a: 2,
+          b: 5,
+        },
+        {
+          title: '読書履歴',
+          color: '#9f2a1f',
+          unit: 'コミット',
+          a: 20,
+          b: 50,
+        },
+        {
+          title: 'ゲーム時間',
+          color: '#3c5a9f',
+          unit: '時間',
+          a: 3,
+          b: 12,
+        },
+      ])
+    },
   }
 }
 </script>
