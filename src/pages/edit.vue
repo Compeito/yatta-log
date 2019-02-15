@@ -21,14 +21,53 @@
             ></v-progress-circular>
           </div>
         </v-btn>
-        <v-btn
-          color="error"
-          @click=""
-          style="margin-top: 20px"
-          v-show="!isNew"
+        <v-dialog
+          v-model="deleteDialogIsOpen"
+          width="500"
+          v-if="log"
         >
-          削除
-        </v-btn>
+          <v-btn
+            color="error"
+            slot="activator"
+            @click="deleteDialogIsOpen = true"
+            style="margin-top: 20px"
+            class="right"
+          >
+            削除
+          </v-btn>
+          <v-card>
+            <v-card-title
+              class="headline grey lighten-2"
+              primary-title
+            >
+              {{ log.data().title }}の削除
+            </v-card-title>
+
+            <v-card-text>
+              この操作は取り消せません。削除しますか？
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                flat
+                @click="deleteLog"
+              >
+                削除する
+              </v-btn>
+              <v-btn
+                color="primary"
+                flat
+                @click="deleteDialogIsOpen = false"
+              >
+                キャンセル
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </BaseForm>
     </v-card>
   </v-layout>
@@ -43,6 +82,7 @@ import firebase from '~/plugins/firebase'
 import BaseForm from '~/components/BaseForm'
 
 const db = firebase.firestore()
+const storage = firebase.storage()
 
 export default {
   components: { BaseForm, VSwatches },
@@ -52,6 +92,7 @@ export default {
       color: '#1FBC9C',
       isNew: true,
       isSubmitting: false,
+      deleteDialogIsOpen: false
     }
   },
   computed: {
@@ -104,7 +145,8 @@ export default {
           isRequired: true,
           rules: [
             v => new RegExp(/^#([\da-fA-F]{6}|[\da-fA-F]{3})$/).test(v) || '不正なカラーコードです'
-          ]
+          ],
+          readonly: true
         },
       ]
     }
@@ -112,13 +154,13 @@ export default {
   mounted() {
     const logID = this.$route.query.l
     if (logID) {
-      this.isNew = false
       db.collection('logs').doc(logID).get()
-        .then(documentSnapshot => {
-          if (!documentSnapshot.exists) {
+        .then(doc => {
+          if (!doc.exists || doc.data().user_id !== this.$store.state.user.id) {
             this.$router.push('/edit')
           } else {
-            this.log = documentSnapshot
+            this.isNew = false
+            this.log = doc
             this.color = this.log.data().color
           }
         })
@@ -155,7 +197,32 @@ export default {
             })
         }
       }
-    }
-  }
+    },
+    deleteLog() {
+      db.collection('logs').doc(this.log.id).get()
+        .then(doc => {
+          const currentOGPImagePath = doc.data().filepath
+          // OGPがあれば削除
+          if (currentOGPImagePath) {
+            storage.ref().child(currentOGPImagePath).delete()
+              .finally(() => {this._deleteWithAlert(doc)})
+          } else {
+            this._deleteWithAlert(doc)
+          }
+        })
+        .finally(() => {this.deleteDialogIsOpen = false})
+    },
+    _deleteWithAlert(doc) {
+      doc.ref.delete()
+        .then(() => {
+          this.$store.commit('alert/activate', '削除しました')
+          this.$router.push('/')
+        })
+        .catch(error => {
+          this.$store.commit('alert/activate', '削除出来ませんでした')
+          console.error(error)
+        })
+    },
+  },
 }
 </script>
