@@ -11,7 +11,7 @@
         <h1 v-else>{{ log.data().title }}の編集</h1>
       </v-card-title>
       <BaseForm ref="form" :fields="fields">
-        <v-swatches colors="material-dark" v-model="fields[2].model"/>
+        <v-swatches colors="material-dark" v-model="color"/>
         <v-btn color="info" @click="submit" style="margin-top: 20px">
           <div v-if="!isSubmitting">送信</div>
           <div v-else>
@@ -20,6 +20,14 @@
               color="white"
             ></v-progress-circular>
           </div>
+        </v-btn>
+        <v-btn
+          color="error"
+          @click=""
+          style="margin-top: 20px"
+          v-show="!isNew"
+        >
+          削除
         </v-btn>
       </BaseForm>
     </v-card>
@@ -41,6 +49,7 @@ export default {
   data() {
     return {
       log: null,
+      color: '#1FBC9C',
       isNew: true,
       isSubmitting: false,
     }
@@ -91,9 +100,11 @@ export default {
           component: VTextField,
           label: 'コミットカラー',
           key: 'color',
-          model: this.log ? this.log.data().color : '#1FBC9C',
+          model: this.color,
           isRequired: true,
-          readonly: true
+          rules: [
+            v => new RegExp(/^#([\da-fA-F]{6}|[\da-fA-F]{3})$/).test(v) || '不正なカラーコードです'
+          ]
         },
       ]
     }
@@ -108,6 +119,7 @@ export default {
             this.$router.push('/edit')
           } else {
             this.log = documentSnapshot
+            this.color = this.log.data().color
           }
         })
     }
