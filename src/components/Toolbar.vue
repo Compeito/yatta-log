@@ -10,9 +10,9 @@
 
 <script>
 export default {
-  computed: {
-    title() {
-      return this.$route.path === '/' ? '' : 'YattaLog'
+  data() {
+    return {
+      title: 'YattaLog'
     }
   }
 }
